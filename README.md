@@ -1,14 +1,15 @@
 # A Comparative Study: Crossing The Gap Using VQE
+This repository contains the materials and code used for a comparative study on the Variational Quantum Eigensolver.
 ## Project Description
 Within the evolving domain of quantum computational chemistry, the Variational Quantum Eigensolver (VQE) has been identified as a crucial algorithm for exploiting the capabilities of near-term quantum computers. This work investigates the proficiency of variational quantum algorithms, particularly adaptive VQE techniques, and Quantum Natural Gradient (QNG) optimization, in calculating the spectral gap of chemical molecules—a key determinant of material characteristics and chemical behavior. Our methodology introduces different approaches to estimating the k-th excited state by mapping highly excited states to the ground state via unitary transformations, broadening VQE's applicability.
 Our research focuses on analyzing three molecular systems, $H_2$, $LiH$, and $BeH_2$, to demonstrate the versatility and precision of our proposed methods. A significant highlight of our study is the implementation of QNG optimization, which markedly improves the optimization process's efficiency. It consistently minimizes the ground state energy while achieving convergence in fewer iterations than traditional gradient descent optimizers. This efficiency underscores the advantage of QNG in navigating the complex optimization landscape of quantum parameters more effectively.
-Additionally, our comparative analysis reveals that both subspace variational quantum eigensolver (SS-VQE) and quantum variational deflation (VQD) methods exhibit strong performance in spectral gap determination, with less than 1\% relative error for $LiH$, and notably, VQD achieves an exceptional 99.99\% accuracy. Lastly we explore Pauli tapering and the usage of a tensor network ansatz to improve algorithm speed.
+Additionally, our comparative analysis reveals that both subspace variational quantum eigensolver (SS-VQE) and quantum variational deflation (VQD) methods exhibit strong performance in spectral gap determination, with less than 1\% relative error for $LiH$, and notably, VQD achieves an exceptional 99.99\% accuracy. Lastly, we explore Pauli tapering and using a tensor network ansatz to improve algorithm speed.
 
 
 ## Methodology
 ### Subspace-Search Variational Quantum Eigensolver
 The Subspace-Search Variational Quantum Eigensolver (SS-VQE) is an algorithm designed to address the challenge of calculating excited states [[1]](https://journals.aps.org/prresearch/abstract/10.1103/PhysRevResearch.1.033062). SS-VQE efficiently explores a low-energy subspace to identify the k-th excited state by utilizing orthogonal input states and leveraging unitary transformations. It is worth noting that this method involves only two parameter optimization steps and eliminates the necessity for ancilla qubits. SS-VQE further generalizes all excited states up to the k-th through a single optimization procedure. Through careful parameter optimization, this approach ensures the orthogonality of input states and accurately maps them to energy eigenstates.
-This approach minimize the following loss function
+This approach minimizes the following loss function
 
 ```math
 \mathcal{L}_w(\theta) = w\bra{\psi_k}U^\dagger(\theta)HU(\theta)\ket{\psi_k} +\sum_{j=0}^{k-1}\bra{\psi_j}U^\dagger(\theta)HU(\theta)\ket{\psi_j}
@@ -19,7 +20,7 @@ subspace spanned by $`\sum_{j=0} E_j`$ with $j$ bounded from above by $k-1$.
 
 ### Variational Quantum Deflation
 
-The potential of VQE for near-term quantum computing is generating excitement for the advancement of computational capabilities. [[2]](https://quantum-journal.org/papers/q-2019-07-01-156/) study aims to enhance VQE's functionality by efficiently identifying excited states. By incorporating ``overlap'' terms into the optimization function and leveraging Hermitian matrices, which consist of a complete set of orthogonal eigenvectors, this work demonstrates a cost-effective approach. Utilizing VQE's ability to maintain classical parameters, low-depth quantum circuits are employed to compute these overlap terms. This methodology maintains the same qubit count as VQE for ground-state calculations, with only a minor increase in measurements. In contrast to existing methods for computing excited states in quantum computing, this approach minimizes resource overhead. The following loss function has been provided over this work. 
+The potential of VQE for near-term quantum computing generates excitement for advancing computational capabilities. [[2]](https://quantum-journal.org/papers/q-2019-07-01-156/) study aims to enhance VQE's functionality by efficiently identifying excited states. This work demonstrates a cost-effective approach by incorporating ``overlap'' terms into the optimization function and leveraging Hermitian matrices, which consist of a complete set of orthogonal eigenvectors. Utilizing VQE's ability to maintain classical parameters, low-depth quantum circuits compute these overlap terms. This methodology maintains the same qubit count as VQE for ground-state calculations, with only a minor increase in measurements. In contrast to existing methods for computing excited states in quantum computing, this approach minimizes resource overhead. The following loss function has been provided in this work. 
 ```math
 \mathcal{L}(\lambda_k) =  \bra{\psi(\lambda_k)}H\ket{\psi(\lambda_k)} +\sum_{i=0}^{k-1} \beta_i |\braket{\psi(\lambda_k)|\psi(\lambda_i)}|^2
 ```
@@ -45,12 +46,12 @@ The essence of the QNG approach is encapsulated in the update rule:
 
 where $\boldsymbol{\theta}$ denotes the variational circuit parameters, $\eta$ signifies the learning rate, $g(\boldsymbol{\theta})$ represents the Fubini-Study metric tensor, and $\nabla f(\boldsymbol{\theta})$ is the gradient of the objective function with respect to $\boldsymbol{\theta}$. The objective function $f$ typically corresponds to the expectation value of the Hamiltonian, whose ground state energy the VQE seeks to approximate.
 
-By accounting for the parameter space's geometry, the QNG optimizer significantly enhances the efficiency of the optimization process. It navigates the circuit's sensitivity to parameter variations, circumventing suboptimal pathways often pursued by conventional optimization methods. In conjuction we use adaptive VQE techniques [[5]](https://www.nature.com/articles/s41467-019-10988-2).
+By accounting for the parameter space's geometry, the QNG optimizer significantly enhances the efficiency of the optimization process. It navigates the circuit's sensitivity to parameter variations, circumventing suboptimal pathways often pursued by conventional optimization methods. In conjunction, we use adaptive VQE techniques [[5]](https://www.nature.com/articles/s41467-019-10988-2).
 
 
 
 ### Exploring algorithm speed improvement
-In addition to using QNG to reduce the number of iterations for convergence, we apply Pauli tapering [here](https://github.com/jsaroni/Crossing_The_Gap_Using_VQE_A_comparative_study/blob/main/Codes/Tapered_Hamiltonian_SS_VQE_with_tensor_network_ansatz.ipynb), leveraging $Z_2$ molecular hamiltonian symmetries to reduce the number of qubits required for the VQE simulation. Additionally, we test the use of the MERA tensor network ansatz [[6]](https://journals.aps.org/prl/abstract/10.1103/PhysRevLett.101.110501) and find that it greatly improves the speed at which an SS-VQE custom algorithm finds the first excited state at the expense of accuracy at certain atomic separation values.
+In addition to using QNG to reduce the number of iterations for convergence, we apply Pauli tapering [here](https://github.com/jsaroni/Crossing_The_Gap_Using_VQE_A_comparative_study/blob/main/Codes/Tapered_Hamiltonian_SS_VQE_with_tensor_network_ansatz.ipynb), leveraging $Z_2$ molecular Hamiltonian symmetries to reduce the number of qubits required for the VQE simulation. Additionally, we test the use of the MERA tensor network ansatz [[6]](https://journals.aps.org/prl/abstract/10.1103/PhysRevLett.101.110501) and find that it greatly improves the speed at which an SS-VQE custom algorithm finds the first excited state at the expense of accuracy at certain atomic separation values.
 
 ## Conclusion
 
@@ -89,3 +90,6 @@ of Excited States,” Quantum, vol. 3, p. 156, Jul. 2019. [Online]. Available: h
 quantum computer,” Nature Communications, vol. 10, July 2019.  <br>
 [6] G. Vidal, “Class of quantum many-body states that can be efficiently simulated,” Phys. Rev. Lett., vol. 101, p. 110501, Sep 2008. [Online].
 Available: https://link.aps.org/doi/10.1103/PhysRevLett.101.110501
+```
+##Citation
+If you use this code or data in your research, please cite the following paper:```
