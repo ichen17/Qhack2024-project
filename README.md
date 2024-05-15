@@ -90,6 +90,3 @@ of Excited States,” Quantum, vol. 3, p. 156, Jul. 2019. [Online]. Available: h
 quantum computer,” Nature Communications, vol. 10, July 2019.  <br>
 [6] G. Vidal, “Class of quantum many-body states that can be efficiently simulated,” Phys. Rev. Lett., vol. 101, p. 110501, Sep 2008. [Online].
 Available: https://link.aps.org/doi/10.1103/PhysRevLett.101.110501
-```
-##Citation
-If you use this code or data in your research, please cite the following paper:```
